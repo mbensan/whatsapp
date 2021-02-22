@@ -19,7 +19,8 @@ app.set('view engine', 'ejs');
 app.use('/static', express.static("static"));
 
 // importar las rutas
-app.use(require('./routes'));
+app.use(require('./routes/auth'));
+app.use(require('./routes/routes'));
 
 
 app.listen(port, function() {

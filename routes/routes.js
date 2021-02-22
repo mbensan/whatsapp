@@ -1,11 +1,12 @@
+/**
+ * Acá dejamos las rutas internas (rutas que asumen que el usuario ya se logueo a nuestra App)
+ */
 const { Router } = require('express');
-const { Keeper } = require('./db');
+const { Keeper } = require('../db');
 const router = Router();
 
 
-
 router.get('/', async (req, res) => {
-
   res.render('index.ejs')
 });
 
@@ -22,8 +23,4 @@ router.post('/', async (req, res) => {
   res.redirect('/');
 });
 
-// GET (traer datos)
-// POST (crear nuevos datos)
-// PUT (modificar datos)
-// DELETE (borrar datos)
 module.exports = router;

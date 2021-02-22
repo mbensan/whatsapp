@@ -12,7 +12,7 @@ router.get('/login', async (req, res) => {
   res.render('login.ejs', {errors: errors});
 });
 
-  // 2. Ruta para registrar nuevos usuarios (formulario de registro)
+// 2. Ruta para registrar nuevos usuarios (formulario de registro)
 router.post('/register', async (req, res) => {
   // Primero encriptamos la contraseña
   const password_encrypted = await bcrypt.hash(req.body.password, 10);
@@ -40,13 +40,32 @@ router.post('/register', async (req, res) => {
 });
 
 // 3. Ruta para que los usuarios que ya existen, entren a la plataforma (formulario de login)
+router.post('/login', async (req, res) => {
+  // Primero intentamos recuperar el usuario por su email
+  const user = await User.findOne({where: {email: req.body.email}});
+  if (user == null) {
+    // en caso de que ese email no exista
+    req.flash('errors', 'Usuario inexistente o contraseña incorrecta');
+    return res.redirect('/login');
+  }
+  // Después comparamos contraseñas
+  var isCorrect = await bcrypt.compare(req.body.password, user.password);
+  if (isCorrect == false) {
+    // en caso de que ese email no exista
+    req.flash('errors', 'Usuario inexistente o contraseña incorrecta');
+    return res.redirect('/login');
+  }
+
+  // Finalmente redirigimos al home
+  req.session.user = user;
+  res.redirect('/')
+});
+
+// 4. Ruta para cerrar sesión
 router.get('/logout', async (req, res) => {
   req.session.user = null;
   res.redirect('/login');
 });
-
-
-// 4. Ruta para cerrar sesión
 
 
 module.exports = router;

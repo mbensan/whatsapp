@@ -11,6 +11,7 @@ function checkLogin(req, res, next) {
   if (req.session.user == null) {
     res.redirect('/login');
   }
+  res.locals.user = req.session.user;
   /* si llegamos hasta acá, esntonces estamos seguros
    que si existe req.session.user */
   next();
@@ -22,7 +23,7 @@ router.get('/', checkLogin, async (req, res) => {
 });
 
 
-router.get('/dos', checkLogin, async (req, res) => {
+router.get('/dos', async (req, res) => {
   res.render('dos.ejs');
 });
 
@@ -38,6 +39,16 @@ router.post('/', checkLogin, async (req, res) => {
     req.flash('errors', err.errors[key].message);
   }
   res.redirect('/');
+});
+
+
+router.get('/saludo', async (req, res) => {
+  res.send('Hi everyone');
+});
+
+
+router.get('/adios', async (req, res) => {
+  res.send('Arrivederci');
 });
 
 

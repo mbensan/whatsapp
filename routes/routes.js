@@ -28,6 +28,11 @@ router.get('/dos', async (req, res) => {
 });
 
 
+router.get('/botones', async (req, res) => {
+  res.render('botones.ejs');
+});
+
+
 
 router.post('/', checkLogin, async (req, res) => {
   try {

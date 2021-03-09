@@ -56,6 +56,34 @@ const User = sql.define('User', {
   },
 });
 
+const Message = sql.define('Message', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  text: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notNull: {
+        msg: 'Debe indicar un texto'
+      }
+    }
+  },
+  time: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    validate: {
+      notNull: {
+        msg: 'Debe indicar un tiempo'
+      }
+    }
+  }
+});
+
+User.hasMany(Message);
+Message.belongsTo(User);
 
 //  después sincronizamos nuestro código con la base de datos
 sql.sync()
@@ -68,5 +96,6 @@ sql.sync()
 
 // finalmente acá listamos todos los modelos que queremos exportar
 module.exports = {
-  User
+  User,
+  Message
 };

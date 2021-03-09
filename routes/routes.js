@@ -1,7 +1,8 @@
+const { User, Message } = require('../db');
 /**
  * Acá dejamos las rutas internas (rutas que asumen que el usuario ya se logueo a nuestra App)
  */
-const { Router } = require('express');
+const { Router, text } = require('express');
 const router = Router();
 
 // Middleware: Verifica si el usuario está logueado.
@@ -18,8 +19,24 @@ function checkLogin(req, res, next) {
 
 
 router.get('/', checkLogin, async (req, res) => {
-  res.render('index.ejs');
+  const messages = await Message.findAll({
+    include: [{ model: User }]
+  });
+  res.render('index.ejs', {messages});
 });
+
+
+router.post('/message', checkLogin, async (req, res) => {
+  console.log('llegamos!');
+  await Message.create({
+    text: req.body.text,
+    time: req.body.time,
+    UserId: req.body.UserId
+  })
+  res.send('OK');
+});
+
+
 
 
 module.exports = router;
